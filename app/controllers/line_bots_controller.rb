@@ -43,17 +43,17 @@ class LineBotsController < ApplicationController
             when /問題+\d/
               index = message.gsub(/問題*/, "").strip.to_i
               questions = user.questions.to_a
-              question = questions.find.with_index(1){ | _question, _index | index == _index }
+              question = questions.find.with_index(1) {|_question, _index| index == _index }
               "#{question.body}\n答えを見るときは、答え#{index}と入力してください"
             when /答え+\d/
-              index = message.gsub(/答え*/,"").strip.to_i
+              index = message.gsub(/答え*/, "").strip.to_i
               questions = user.questions.to_a
-              question = questions.find.with_index(1){ | _question, _index | index == _index }
-              "#{question.answer}"
+              question = questions.find.with_index(1) {|_question, _index| index == _index }
+              question.answer.to_s
             when /削除+\d/
-              index = message.gsub(/削除*/,"").strip.to_i
+              index = message.gsub(/削除*/, "").strip.to_i
               questions = user.questions.to_a
-              question = questions.find.with_index(1){ | _question, _index | index == _index }
+              question = questions.find.with_index(1) {|_question, _index| index == _index }
               question.destroy!
               "問題#{index}の削除が完了しました。"
             when message
@@ -70,7 +70,7 @@ class LineBotsController < ApplicationController
                 answer = message.gsub(/\d+の答え＝*/, "").strip
                 index = message.gsub(/の答え＝#{answer}/, "").strip.to_i
                 questions = user.questions.to_a
-                question = questions.find.with_index(1){ |_question, _index | index == _index }
+                question = questions.find.with_index(1) {|_question, _index| index == _index }
                 question.update!(answer: answer)
                 "#{index} : 答え「#{answer}」の登録が完了しました。"
               end
@@ -78,35 +78,35 @@ class LineBotsController < ApplicationController
 
           reply_message = {
             type: "text",
-            text: text
+            text: text,
           }
           client.reply_message(event["replyToken"], reply_message)
           if reply_message[:text] == "問題を選んでください。\n問題？と入力してください。\n？の部分に該当する数字を入れてください。"
             questions = user.questions
-            add_text = questions.map.with_index(1) { |question, index| "#{index}：#{question.body}"}.join("\n")
+            add_text = questions.map.with_index(1) {|question, index| "#{index}：#{question.body}" }.join("\n")
             message = {
               type: "text",
-              text: add_text
+              text: add_text,
             }
-            response = client.push_message("#{user_id}", message)
+            response = client.push_message(user_id.to_s, message)
             p response
           elsif reply_message[:text] == "答え一覧です"
             questions = user.questions
-            add_text = questions.map.with_index(1) { |question, index| "#{index}：#{question.answer}"}.join("\n")
+            add_text = questions.map.with_index(1) {|question, index| "#{index}：#{question.answer}" }.join("\n")
             message = {
               type: "text",
-              text: add_text
+              text: add_text,
             }
-            response = client.push_message("#{user_id}", message)
+            response = client.push_message(user_id.to_s, message)
             p response
           elsif reply_message[:text] == "削除する問題を選んでください。\n削除？と入力してください。\n？の部分に数字を入れてください。"
             questions = user.questions
-            add_text = questions.map.with_index(1) { |question, index| "#{index}：#{question.body}"}.join("\n")
+            add_text = questions.map.with_index(1) {|question, index| "#{index}：#{question.body}" }.join("\n")
             message = {
               type: "text",
-              text: add_text
+              text: add_text,
             }
-            response = client.push_message("#{user_id}", message)
+            response = client.push_message(user_id.to_s, message)
             p response
           end
         end
