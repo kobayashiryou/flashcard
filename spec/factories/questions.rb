@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :question do
-    body { "MyString" }
-    answer { "MyString" }
-    references { "" }
+    body { Faker::Lorem.sentence }
+    answer { Faker::Lorem.sentence }
+    user
   end
 end
