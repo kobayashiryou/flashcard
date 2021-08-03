@@ -5,6 +5,8 @@ application up and running.
 
 Things you may want to cover:
 
+[![](https://img.youtube.com/vi/wCnZWuD3pms/0.jpg)](https://www.youtube.com/watch?v=wCnZWuD3pms)
+
 * Ruby version
 
 * System dependencies
